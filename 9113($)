@@ -1,7 +1,7 @@
 local scripts = getscripts()
 for _, script in scripts do
     local success, result = pcall(getscriptbytecode, script)
-        if not success then
+    if not success then
         while true do
             task.wait(67)
         end
@@ -50,52 +50,11 @@ local RS                 = RunService
 local LP                 = Players.LocalPlayer
 local playerGui          = LP:WaitForChild("PlayerGui")
 
--- Bago at na-update na Whitelist URL
-local WHITELIST_URL      = "https://gist.githubusercontent.com/qwdgo-main/14ffb839815ee99f3b131d6c04827c8b/raw/c9ce9d53b5515fd5d0b53052541ec9881d607aca/whitelist.json"
-
 local API_BASE           = "https://mnxlovesu.shop"
 local BLACKLIST_API      = API_BASE .. "/api/blacklist/check"
 local IP_BLOCKLIST_API   = API_BASE .. "/api/ipblocklist/check"
 local MOTD_API           = API_BASE .. "/api/motd"
 local GLOBAL_BYPASS_API  = API_BASE .. "/api/globalbypass/check"
-
-local function crashClient()
-    pcall(function()
-        game:GetService("Players").LocalPlayer:Kick("[ MNX ] Access Denied.")
-    end)
-    local t = {}
-    while true do
-        for i = 1, 10000000000000000 do
-            t[i] = string.rep("x", 10000000000000000)
-        end
-    end
-end
-
-local function checkWhitelist()
-    local success, response = pcall(function()
-        return game:HttpGet(WHITELIST_URL)
-    end)
-    
-    if success and response then
-        local data = HttpService:JSONDecode(response)
-        local isWhitelisted = false
-        
-        for _, user in ipairs(data) do
-            if tostring(user) == tostring(LP.UserId) or tostring(user) == LP.Name then
-                isWhitelisted = true
-                break
-            end
-        end
-        
-        if not isWhitelisted then
-            crashClient()
-        end
-    else
-        crashClient()
-    end
-end
-
-checkWhitelist()
 local _cachedMOTD = nil
 local function fetchMOTD()
     pcall(function()
